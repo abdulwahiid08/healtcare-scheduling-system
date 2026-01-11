@@ -1,0 +1,54 @@
+version: "3.8"
+
+services:
+  postgres:
+    image: postgres:15
+    container_name: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - healthcare-net
+
+  notification-service:
+    build: ./notification-service
+    container_name: notification-service
+    env_file:
+      - ./notification-service/.env
+    depends_on:
+      - redis
+
+  auth-service:
+    build: ./auth-service
+    container_name: auth-service
+    env_file:
+      - ./auth-service/.env
+    ports:
+      - "3001:3001"
+    depends_on:
+      - postgres
+    networks:
+      - healthcare-net
+
+  schedule-service:
+    build: ./schedule-service
+    container_name: schedule-service
+    env_file:
+      - ./schedule-service/.env
+    ports:
+      - "3002:3002"
+    depends_on:
+      - postgres
+      - auth-service
+    networks:
+      - healthcare-net
+
+networks:
+  healthcare-net:
+
+volumes:
+  pgdata:

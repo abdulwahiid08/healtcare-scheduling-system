@@ -1,0 +1,7 @@
+# Semua file text → normalisasi LF di repo
+* text=auto
+
+# Khusus file SQL atau Prisma tetap LF
+*.sql text eol=lf
+*.prisma text eol=lf
+*.gql text eol=lf

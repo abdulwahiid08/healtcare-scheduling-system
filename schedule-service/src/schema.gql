@@ -1,0 +1,188 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+"""Data Customer"""
+type Customer {
+  """ID unik customer, auto-generate UUID"""
+  id: ID!
+
+  """Nama lengkap customer"""
+  name: String!
+
+  """Email customer (unik, opsional)"""
+  email: String!
+
+  """Tanggal pembuatan data"""
+  createdAt: DateTime!
+
+  """Tanggal terakhir update data"""
+  updatedAt: DateTime!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type BaseResponse {
+  success: Boolean!
+  message: String!
+}
+
+"""Response list customer"""
+type CustomersResponse {
+  success: Boolean!
+  message: String!
+  data: [Customer!]!
+}
+
+"""Response single customer"""
+type CustomerResponse {
+  success: Boolean!
+  message: String!
+  data: Customer
+}
+
+"""Data Doctor"""
+type Doctor {
+  """ID unik doctor, auto-generate UUID"""
+  id: ID!
+
+  """Nama lengkap doctor"""
+  name: String!
+
+  """Tanggal pembuatan data"""
+  createdAt: DateTime!
+
+  """Tanggal terakhir update data"""
+  updatedAt: DateTime!
+}
+
+"""Response list doctor"""
+type DoctorsResponse {
+  success: Boolean!
+  message: String!
+  data: [Doctor!]!
+}
+
+"""Response single doctor"""
+type DoctorResponse {
+  success: Boolean!
+  message: String!
+  data: Doctor
+}
+
+type Schedule {
+  id: ID!
+  objective: String!
+  scheduledAt: DateTime!
+  customer: Customer!
+  doctor: Doctor!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type SchedulesResponse {
+  success: Boolean!
+  message: String!
+  data: [Schedule!]!
+}
+
+type ScheduleResponse {
+  success: Boolean!
+  message: String!
+  data: Schedule
+}
+
+type Query {
+  health: String!
+
+  """Menampilkan semua customer"""
+  customers(skip: Int, take: Int): [CustomersResponse!]!
+
+  """Menampilkan customer berdasarkan id"""
+  customer(id: String!): Customer!
+
+  """Menampilkan semua doctor"""
+  doctors(skip: Int, take: Int): [DoctorsResponse!]!
+
+  """Menampilkan doctor berdasarkan id"""
+  doctor(id: String!): Doctor!
+  schedules(doctorId: String, customerId: String, skip: Int, take: Int): [SchedulesResponse!]!
+  schedule(id: String!): Schedule!
+}
+
+type Mutation {
+  """Membuat customer baru"""
+  createCustomer(createCustomerInput: CreateCustomerInput!): CustomerResponse!
+
+  """Update data customer berdasarkan ID"""
+  updateCustomer(updateCustomerInput: UpdateCustomerInput!): CustomerResponse!
+
+  """Menghapus customer berdasarkan ID"""
+  removeCustomer(id: String!): BaseResponse!
+
+  """Membuat doctor baru"""
+  createDoctor(createDoctorInput: CreateDoctorInput!): DoctorResponse!
+
+  """Update data doctor berdasarkan ID"""
+  updateDoctor(updateDoctorInput: UpdateDoctorInput!): DoctorResponse!
+
+  """Menghapus doctor berdasarkan ID"""
+  removeDoctor(id: String!): BaseResponse!
+  createSchedule(createScheduleInput: CreateScheduleInput!): ScheduleResponse!
+  updateSchedule(updateScheduleInput: UpdateScheduleInput!): ScheduleResponse!
+  removeSchedule(id: String!): BaseResponse!
+}
+
+"""Input untuk membuat customer baru"""
+input CreateCustomerInput {
+  """Nama lengkap customer"""
+  name: String!
+
+  """Email customer (unik)"""
+  email: String!
+}
+
+"""Input untuk update customer, ID wajib"""
+input UpdateCustomerInput {
+  """Nama lengkap customer"""
+  name: String
+
+  """Email customer (unik)"""
+  email: String
+
+  """ID customer yang ingin diupdate"""
+  id: String!
+}
+
+"""Input untuk membuat doctor baru"""
+input CreateDoctorInput {
+  """Nama lengkap doctor"""
+  name: String!
+}
+
+"""Input untuk update doctor, ID wajib"""
+input UpdateDoctorInput {
+  """Nama lengkap doctor"""
+  name: String
+
+  """ID doctor yang ingin diupdate"""
+  id: String!
+}
+
+input CreateScheduleInput {
+  objective: String!
+  customerId: String!
+  doctorId: String!
+  scheduledAt: DateTime!
+}
+
+input UpdateScheduleInput {
+  objective: String
+  customerId: String
+  doctorId: String
+  scheduledAt: DateTime
+  id: String!
+}

@@ -66,23 +66,24 @@ export class ScheduleService {
         createScheduleInput.doctorId,
         createScheduleInput.scheduledAt
       )
-  
-      // SEND EMAIL 
-      // await this.emailQueue.add('send-email', {
-      //   to: customer.email,
-      //   subject: 'Schedule Created',
-      //   text: `Your schedule with ${doctor.name} is confirmed at ${createScheduleInput.scheduledAt}`,
-      // });
-  
+
       // CREATE SCHEDULE
-      return this.prisma.schedule.create({
+      const schedule = await this.prisma.schedule.create({
         data: createScheduleInput,
         include: {
           customer: true,
           doctor: true,
         },
+      })
+
+      // SEND EMAIL 
+      await this.emailQueue.add('send-email', {
+        to: schedule.customer.email,
+        subject: 'Schedule Created',
+        text: `Your schedule with ${schedule.doctor.name} is confirmed at ${schedule.scheduledAt}`,
       });
-      
+  
+      return schedule;
     } catch (error) {
       handlePrismaError(error, 'Schedule');
     }
@@ -151,22 +152,24 @@ export class ScheduleService {
   
       await this.checkConflictSchedule(doctorId, scheduledAt, id);
      
+      const updatedSchedule = await this.prisma.schedule.update({
+      where: { id },
+      data: updateScheduleInput,
+      include: {
+        customer: true,
+        doctor: true,
+      },
+    });
+
       // SEND EMAIL 
-      // await this.emailQueue.add('send-email', {
-      //   to: customer.email,
-      //   subject: 'Schedule Updated',
-      //   text: `Your schedule with ${doctor.name} is updated at ${updateScheduleInput.scheduledAt}`,
-      // });
+      await this.emailQueue.add('send-email', {
+        to: updatedSchedule.customer.email,
+        subject: 'Schedule Updated',
+        text: `Your schedule with ${updatedSchedule.doctor.name} is updated at ${updatedSchedule.scheduledAt}`,
+      });
 
       // UPDATE SCHEDULE
-      return this.prisma.schedule.update({
-        where: { id },
-        data: updateScheduleInput,
-        include: {
-          customer: true,
-          doctor: true,
-        },
-      });
+      return updatedSchedule;
     } catch (error) {
       handlePrismaError(error, 'Schedule', id);
     }
@@ -174,15 +177,25 @@ export class ScheduleService {
 
  async remove(id: string) {
   try {
-    // await this.emailQueue.add('send-email', {
-    //   to: customer.email,
-    //   subject: 'Schedule Cancelled',
-    //   text: `Your schedule has been cancelled`,
-    // });
+    const schedule = await this.prisma.schedule.findUnique({
+      where: { id },
+      include: { customer: true, doctor: true },
+    });
+    if (!schedule) {
+      throw new BadRequestException(`Opps! Schedule not found (id: ${id})`);
+    }
 
-     return await this.prisma.schedule.delete({
+    const deleteSchedule = await this.prisma.schedule.delete({
       where: { id },
     });
+
+    await this.emailQueue.add('send-email', {
+      to: schedule.customer.email,
+      subject: 'Schedule Cancelled',
+      text: `Your schedule has been cancelled`,
+    });
+
+     return deleteSchedule;
     
   } catch (error) {
     handlePrismaError(error, 'Schedule', id);

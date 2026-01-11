@@ -13,6 +13,40 @@ Backend microservice-based system for managing healthcare consultation schedules
 docker compose up --build
 ```
 
+# List environtment variables
+
+```sh
+# AUTH ENV
+NODE_ENV=
+APP_PORT=3001
+JWT_SECRET='your_secret_key'
+JWT_EXPIRES_IN=7d
+DATABASE_URL=postgresql://user:pass@host:5432/db_auth_healthcare
+
+#SCHEDULE ENV
+NODE_ENV=
+APP_PORT=3002
+AUTH_SERVICE_URL=http://auth-service:3001
+DATABASE_URL=postgresql://user:pass@host:5432/db_schedule_healthcare
+REDIS_HOST=
+REDIS_PORT=
+REDIS_PASSWORD=
+
+#NOTIFICATION ENV
+NODE_ENV=
+APP_PORT=3003
+SMTP_HOST=smtp.gmail.com
+SMTP_FROM=garudakasirmobile@gmail.com
+SMTP_PORT=465
+SMTP_SECURE=true
+SMTP_USER=garudakasirmobile@gmail.com
+SMTP_PASS=gyjaaphnmbewrnmx
+REDIS_HOST=127.0.0.1
+REDIS_PORT=6379
+REDIS_PASSWORD=
+
+```
+
 ## GraphQL queris/mutations
 
 ```sh

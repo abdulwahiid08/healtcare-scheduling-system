@@ -13,11 +13,24 @@ services:
       - pgdata:/var/lib/postgresql/data
     networks:
       - healthcare-net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   redis:
     image: redis:7
+    container_name: redis
     ports:
       - "6379:6379"
+    networks:
+      - healthcare-net
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   notification-service:
     build: ./notification-service
@@ -25,7 +38,10 @@ services:
     env_file:
       - ./notification-service/.env
     depends_on:
-      - redis
+      redis:
+        condition: service_healthy
+    networks:
+      - healthcare-net
 
   auth-service:
     build: ./auth-service
@@ -35,7 +51,8 @@ services:
     ports:
       - "3001:3001"
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
     networks:
       - healthcare-net
 
@@ -47,9 +64,12 @@ services:
     ports:
       - "3002:3002"
     depends_on:
-      - postgres
-      - redis
-      - auth-service
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      auth-service:
+        condition: service_started
     networks:
       - healthcare-net
 

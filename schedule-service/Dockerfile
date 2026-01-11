@@ -13,6 +13,7 @@ COPY . .
 
 # Generate Prisma
 RUN npx prisma generate
+RUN npm run build
 
 EXPOSE 3002
 

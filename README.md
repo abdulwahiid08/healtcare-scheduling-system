@@ -36,13 +36,13 @@ REDIS_PASSWORD=
 NODE_ENV=
 APP_PORT=3003
 SMTP_HOST=smtp.gmail.com
-SMTP_FROM=garudakasirmobile@gmail.com
+SMTP_FROM=from
 SMTP_PORT=465
 SMTP_SECURE=true
-SMTP_USER=garudakasirmobile@gmail.com
-SMTP_PASS=gyjaaphnmbewrnmx
-REDIS_HOST=127.0.0.1
-REDIS_PORT=6379
+SMTP_USER=user
+SMTP_PASS=pass
+REDIS_HOST=
+REDIS_PORT=
 REDIS_PASSWORD=
 
 ```

@@ -10,6 +10,11 @@ Backend microservice-based system for managing healthcare consultation schedules
 ## Run Project
 
 ```bash
+# Jalankan Migration yang ada di auth-service dan schedule-service secara manual
+npx prisma migrate dev --name init
+```
+
+```bash
 docker compose up --build
 ```
 

@@ -50,7 +50,7 @@ export class ScheduleResolver {
     return this.scheduleService.findOne(id);
   }
 
-  @Mutation(() => ScheduleResponse, { name: 'Mengubah schedule berdasarkan id' })
+  @Mutation(() => ScheduleResponse, { description: 'Mengubah schedule berdasarkan id' })
   async updateSchedule(@Args('updateScheduleInput') updateScheduleInput: UpdateScheduleInput): Promise<ScheduleResponse> {
     const data = await this.scheduleService.update(updateScheduleInput.id, updateScheduleInput);
     
@@ -61,7 +61,7 @@ export class ScheduleResolver {
     }
   }
 
-  @Mutation(() => BaseResponse, { name: 'Menghapus schedule berdasarkan id' })
+  @Mutation(() => BaseResponse, { description: 'Menghapus schedule berdasarkan id' })
   async removeSchedule(@Args('id') id: string): Promise<BaseResponse> {
     await this.scheduleService.remove(id);
 

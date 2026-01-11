@@ -46,15 +46,15 @@ import { BullModule } from '@nestjs/bull';
     // BULL MODULE
      BullModule.forRoot({
       redis: {
-        host: 'redis',
-        port: 6379,
+        host: process.env.REDIS_HOST,
+        port: (process.env.REDIS_PORT ?? 6379) as number,
       },
     }),
 
     // CacheModule.register({
     //   store: redisStore,
-    //   host: 'redis',
-    //   port: 6379,
+    //   host: process.env.REDIS_HOST,
+    //   port: (process.env.REDIS_PORT ?? 6379) as number,
     // }),
 
     // MODULES FEATURES

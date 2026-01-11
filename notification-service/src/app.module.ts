@@ -14,8 +14,8 @@ import { NotificationProcessor } from './notification.processor';
 
       BullModule.forRoot({
         redis: {
-          host: 'redis',
-          port: 6379,
+          host: process.env.REDIS_HOST,
+          port: (process.env.REDIS_PORT ?? 6379) as number,
         },
       }),
 

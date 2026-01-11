@@ -24,7 +24,7 @@ export class DoctorResolver {
     }
   }
 
-  @Query(() => [DoctorsResponse], { name: 'doctors',  description: "Menampilkan semua doctor" })
+  @Query(() => DoctorsResponse, { name: 'doctors',  description: "Menampilkan semua doctor" })
   async findAll(
     @Args('skip', { type: () => Int, nullable: true }) skip = 0,
     @Args('take', { type: () => Int, nullable: true }) take = 10,

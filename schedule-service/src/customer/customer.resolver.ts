@@ -24,7 +24,7 @@ export class CustomerResolver {
     };
   }
 
-  @Query(() => [CustomersResponse], { name: 'customers', description: "Menampilkan semua customer" })
+  @Query(() => CustomersResponse, { name: 'customers', description: "Menampilkan semua customer" })
   async findAll(
     @Args('skip', { type: () => Int, nullable: true }) skip = 0,
     @Args('take', { type: () => Int, nullable: true }) take = 10,
@@ -44,10 +44,8 @@ export class CustomerResolver {
   }
 
   @Mutation(() => CustomerResponse, { description: "Update data customer berdasarkan ID" })
-  async updateCustomer(@Args('updateCustomerInput') updateCustomerInput: UpdateCustomerInput): Promise<CustomerResponse> {
-    console.log("🚀 ~ CustomerResolver ~ updateCustomer ~ updateCustomerInput:", updateCustomerInput)
+  async updateCustomer(@Args('updateCustomerInput') updateCustomerInput: UpdateCustomerInput): Promise<CustomerResponse> {  
     const data = await this.customerService.update(updateCustomerInput.id, updateCustomerInput);
-    console.log("🚀 ~ CustomerResolver ~ updateCustomer ~ data:", data)
 
     return { 
       success: true, 

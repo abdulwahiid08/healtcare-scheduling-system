@@ -24,7 +24,7 @@ export class ScheduleResolver {
     };
   }
 
-  @Query(() => [SchedulesResponse], { name: 'schedules', description: 'Menampilkan semua schedule' })
+  @Query(() => SchedulesResponse, { name: 'schedules', description: 'Menampilkan semua schedule' })
   async findAll(
     @Args('doctorId', { nullable: true }) doctorId?: string,
     @Args('customerId', { nullable: true }) customerId?: string,
